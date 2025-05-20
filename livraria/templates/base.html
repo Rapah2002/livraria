@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Livraria Moderna</title>
+
+  <!-- Ícones do Font Awesome -->
+  <script src="https://kit.fontawesome.com/a2d0e4b66f.js" crossorigin="anonymous"></script>
+
+  <!-- Fonte Google -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Roboto&display=swap" rel="stylesheet">
+
+  <style>
+    /* Reset e fontes */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: #f8f5f2 url('https://images.unsplash.com/photo-1512820790803-83ca734da794') no-repeat top center / cover;
+      color: #2d2d2d;
+      min-height: 100vh;
+    }
+
+    /* Banner principal */
+    header {
+      background: linear-gradient(to right, #3e2f2f99, #1e3d5999), url('https://images.unsplash.com/photo-1519681393784-d120267933ba');
+      background-size: cover;
+      background-position: center;
+      color: white;
+      padding: 60px 20px;
+      text-align: center;
+    }
+
+    header h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 3rem;
+      letter-spacing: 2px;
+    }
+
+    nav {
+      background-color: #2c2c2c;
+      display: flex;
+      justify-content: center;
+      padding: 12px;
+      gap: 30px;
+    }
+
+    nav a {
+      color: #fff;
+      font-weight: bold;
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    nav a:hover {
+      color: #f7c04a;
+    }
+
+    .container {
+      background-color: #ffffffde;
+      max-width: 960px;
+      margin: 30px auto;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    h2.text-center {
+      text-align: center;
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      margin-bottom: 20px;
+      color: #2c2c2c;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    th, td {
+      padding: 14px;
+      text-align: left;
+    }
+
+    thead {
+      background-color: #1f4e5f;
+      color: white;
+    }
+
+    tr:nth-child(even) {
+      background-color: #f6f6f6;
+    }
+
+    tr:hover {
+      background-color: #f9e5b2;
+    }
+
+    a {
+      color: #1f4e5f;
+      font-weight: bold;
+    }
+
+    .form-label {
+      font-weight: bold;
+      margin-bottom: 6px;
+      display: block;
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 20px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+
+    .btn {
+      background-color: #922b21;
+      color: white;
+      padding: 12px 24px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background-color 0.3s ease;
+    }
+
+    .btn:hover {
+      background-color: #641e16;
+    }
+
+    .alert {
+      padding: 15px;
+      border-radius: 6px;
+      margin-bottom: 20px;
+    }
+
+    .alert-success {
+      background-color: #d4edda;
+      color: #155724;
+    }
+
+    .alert-danger {
+      background-color: #f8d7da;
+      color: #721c24;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      color: #999;
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1><i class="fas fa-book-reader"></i> Livraria Moderna</h1>
+  </header>
+
+  <nav>
+    <a href="{% url 'home' %}"><i class="fas fa-home"></i> Home</a>
+    <a href="{% url 'add_book' %}"><i class="fas fa-plus-circle"></i> Adicionar Livro</a>
+    <a href="{% url 'register' %}"><i class="fas fa-user-plus"></i> Cadastro</a>
+    <a href="#"><i class="fas fa-sign-out-alt"></i> Sair</a>
+  </nav>
+
+  <div class="container">
+    {% if messages %}
+      {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">
+          {{ message }}
+        </div>
+      {% endfor %}
+    {% endif %}
+
+    {% block content %}
+    {% endblock %}
+  </div>
+
+  <footer>
+    &copy; {{ now|date:"Y" }} Livraria Moderna. Todos os direitos reservados.
+  </footer>
+</body>
+</html>

@@ -1,0 +1,196 @@
+{% extends 'base.html' %}
+{% block content %}
+<style>
+  /* Container geral */
+  .container-home {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 15px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #2c3e50;
+  }
+
+  h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.4rem;
+    color: #8b4513; /* marrom chocolate */
+    margin-bottom: 10px;
+    text-align: center;
+    letter-spacing: 1.3px;
+  }
+
+  hr {
+    border: 0;
+    height: 2px;
+    background: linear-gradient(90deg, #a67c00, #f7c04a, #a67c00);
+    margin-bottom: 25px;
+    width: 60%;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 5px;
+  }
+
+  /* Tabela estilizada */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    background-color: #fff8e1;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  thead {
+    background: #f7c04a;
+    color: #4b2e05;
+  }
+
+  thead th {
+    padding: 12px 15px;
+    font-weight: 700;
+    font-size: 1.1rem;
+    text-align: left;
+    border-bottom: 2px solid #d4af37;
+  }
+
+  tbody tr {
+    transition: background-color 0.3s ease;
+    cursor: pointer;
+  }
+
+  tbody tr:hover {
+    background-color: #f0e5c9;
+  }
+
+  tbody td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #e6d7a7;
+    color: #5a4631;
+  }
+
+  tbody td a {
+    color: #6b4c00;
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  tbody td a:hover {
+    text-decoration: underline;
+    color: #8b5e00;
+  }
+
+  /* Formulário Login estilizado */
+  form {
+    background-color: #fff8e1;
+    padding: 25px 30px;
+    border-radius: 10px;
+    box-shadow: 0 6px 15px rgba(166, 134, 0, 0.3);
+    max-width: 400px;
+    margin: 20px auto;
+  }
+
+  form label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #8b5e00;
+  }
+
+  form input[type="text"],
+  form input[type="password"] {
+    width: 100%;
+    padding: 10px 14px;
+    margin-bottom: 20px;
+    border: 2px solid #d4af37;
+    border-radius: 6px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+  }
+
+  form input[type="text"]:focus,
+  form input[type="password"]:focus {
+    outline: none;
+    border-color: #f7c04a;
+    box-shadow: 0 0 8px #f7c04a88;
+  }
+
+  form button {
+    width: 100%;
+    padding: 12px 0;
+    background-color: #a67c00;
+    border: none;
+    color: white;
+    font-weight: 700;
+    font-size: 1.1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+
+  form button:hover {
+    background-color: #f7c04a;
+    color: #4b2e05;
+  }
+
+  /* Mensagem de erro */
+  .alert-warning {
+    background-color: #fff3cd;
+    border: 1px solid #ffeeba;
+    color: #856404;
+    padding: 12px 15px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+  }
+
+  /* Centralização dos textos */
+  .text-center {
+    text-align: center;
+  }
+</style>
+
+<div class="container-home">
+
+  {% if user.is_authenticated %}
+      <h2>Lista de Livros</h2>
+      <hr>
+      <table>
+          <thead>
+              <tr>
+                  <th>ID</th>
+                  <th>TÍTULO</th>
+                  <th>GÊNERO</th>
+                  <th>Ano</th>
+                  <th>Valor</th>
+              </tr>
+          </thead>
+          <tbody>
+      {% if books %}
+          {% for book in books %}
+              <tr>
+                  <td><a href="{% url 'book' book.id %}">{{book.id}}</a></td>
+                  <td>{{book.title}}</td>
+                  <td>{{book.genre}}</td>
+                  <td>{{book.year}}</td>
+                  <td>R$ {{book.value}}</td>
+              </tr>
+          {% endfor %}
+      {% endif %}
+          </tbody>
+      </table>
+
+  {% else %}
+      <h2 class="text-center">Faça seu login</h2>
+      <hr>
+      <form method="POST" action="{% url 'home' %}">
+          {% csrf_token %}
+          <label for="inputEmail">Usuário</label>
+          <input type="text" name="usuario" id="inputEmail" required>
+
+          <label for="inputPassword">Senha</label>
+          <input type="password" name="senha" id="inputPassword" required>
+
+          <button type="submit">Login</button>
+      </form>
+  {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,140 @@
+<style>
+  /* Reset e base */
+  nav {
+    background: #1f4e5f;
+    padding: 0 20px;
+    font-family: 'Roboto', sans-serif;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+  }
+
+  nav .nav-container {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 60px;
+  }
+
+  nav .brand {
+    color: #f7c04a;
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    font-size: 1.8rem;
+    text-decoration: none;
+    letter-spacing: 1.2px;
+  }
+
+  nav .menu {
+    list-style: none;
+    display: flex;
+    gap: 30px;
+  }
+
+  nav .menu li {
+    position: relative;
+  }
+
+  nav .menu li a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 1rem;
+    padding: 8px 5px;
+    transition: color 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  nav .menu li a:hover,
+  nav .menu li a.active {
+    color: #f7c04a;
+  }
+
+  /* Ícones fontawesome (usar CDN) */
+  nav .menu li a i {
+    font-size: 1.1rem;
+  }
+
+  /* Mobile */
+  .menu-toggle {
+    display: none;
+    flex-direction: column;
+    cursor: pointer;
+    gap: 4px;
+  }
+
+  .menu-toggle span {
+    width: 25px;
+    height: 3px;
+    background: #f7c04a;
+    border-radius: 2px;
+    transition: 0.3s;
+  }
+
+  @media (max-width: 768px) {
+    nav .menu {
+      position: fixed;
+      top: 60px;
+      right: -100%;
+      width: 200px;
+      height: calc(100vh - 60px);
+      background: #1f4e5f;
+      flex-direction: column;
+      padding-top: 30px;
+      gap: 20px;
+      transition: right 0.3s ease;
+      box-shadow: -2px 0 12px rgba(0,0,0,0.4);
+      z-index: 1000;
+    }
+
+    nav .menu.show {
+      right: 0;
+    }
+
+    .menu-toggle {
+      display: flex;
+    }
+  }
+</style>
+
+<nav>
+  <div class="nav-container">
+    <a href="{% url 'home' %}" class="brand"><i class="fas fa-book"></i> App Livro</a>
+
+    <div class="menu-toggle" id="menu-toggle">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+
+    <ul class="menu" id="menu">
+      <li><a href="#" class="active"><i class="fas fa-home"></i> Home</a></li>
+
+      {% if user.is_authenticated %}
+      <li><a href="{% url 'add_book' %}"><i class="fas fa-plus-circle"></i> Adicionar Livro</a></li>
+      <li><a href="{% url 'logout' %}"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+      {% else %}
+      <li><a href="{% url 'register' %}"><i class="fas fa-user-plus"></i> Cadastro de Usuário</a></li>
+      <li><a href="{% url 'home' %}"><i class="fas fa-sign-in-alt"></i> Login</a></li>
+      {% endif %}
+    </ul>
+  </div>
+</nav>
+
+<script>
+  // Toggle menu no mobile
+  const menuToggle = document.getElementById('menu-toggle');
+  const menu = document.getElementById('menu');
+
+  menuToggle.addEventListener('click', () => {
+    menu.classList.toggle('show');
+  });
+</script>
+
+<!-- FontAwesome CDN para os ícones -->
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+/>

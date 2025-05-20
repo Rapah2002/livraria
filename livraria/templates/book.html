@@ -1,0 +1,125 @@
+{% extends 'base.html' %}
+{% block content %}
+<style>
+  .book-container {
+    max-width: 500px;
+    margin: 0 auto;
+    background: #fff;
+    padding: 30px 25px;
+    border-radius: 12px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+    font-family: 'Roboto', sans-serif;
+    color: #1f4e5f;
+  }
+
+  h2.text-center {
+    font-family: 'Playfair Display', serif;
+    color: #922b21;
+    margin-bottom: 10px;
+  }
+
+  hr {
+    border: none;
+    border-top: 2px solid #f7c04a;
+    margin-bottom: 25px;
+  }
+
+  .card-header {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem;
+    color: #1f4e5f;
+    font-weight: 700;
+    border-bottom: 2px solid #f7c04a;
+    padding-bottom: 10px;
+  }
+
+  .card-body {
+    text-align: center;
+    padding: 20px 0;
+  }
+
+  .card-title {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+
+  p {
+    font-size: 1rem;
+    color: #444;
+    margin-bottom: 20px;
+  }
+
+  span.price {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #922b21;
+  }
+
+  /* Botões */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    border: none;
+    transition: background-color 0.3s ease;
+    text-decoration: none;
+    color: white;
+    user-select: none;
+  }
+
+  .btn-secondary {
+    background-color: #1f4e5f;
+  }
+
+  .btn-secondary:hover {
+    background-color: #164150;
+  }
+
+  .btn-danger {
+    background-color: #922b21;
+  }
+
+  .btn-danger:hover {
+    background-color: #641e16;
+  }
+
+  /* Ícones nos botões */
+  .btn i {
+    font-size: 1.2rem;
+  }
+
+  .btn-container {
+    text-align: center;
+    margin-top: 30px;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+  }
+</style>
+
+<div class="book-container">
+  <h2 class="text-center"><i class="fas fa-book"></i> Livro - {{ book.title }}</h2>
+  <hr>
+  <div>
+    <div class="card-header">
+      {{ book.title }}
+    </div>
+    <div class="card-body">
+      <h5 class="card-title">{{ book.genre }}, Ano {{ book.year }}</h5>
+      <p>{{ book.description }}</p>
+      <hr>
+      <span class="price">R$ {{ book.value }}</span>
+    </div>
+  </div>
+  <div class="btn-container">
+    <a href="{% url 'home' %}" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Voltar</a>
+    <a href="{% url 'delete_book' book.id %}" class="btn btn-danger"><i class="fas fa-trash-alt"></i> Excluir</a>
+  </div>
+</div>
+{% endblock %}
