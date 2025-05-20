@@ -4,6 +4,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from .forms import SignUpForm, addBookForm
 from .models import Book
+from django.core.exceptions import ObjectDoesNotExist
 
 # Create your views here.
 
@@ -70,14 +71,17 @@ def book_detail(request, id):
         messages.error(request, 'Você precisa estar logado!')
         return redirect('home')
 
-def book_delete(request,id):
+def book_delete(request, id):
     if request.user.is_authenticated:
-        book = Book.objects.get(id=id)
-        book.delete()
-        messages.sucess(request, 'Livro excluido com sucesso!')
+        try:
+            book = Book.objects.get(id=id)
+            book.delete()
+            messages.success(request, 'Livro excluído com sucesso!')
+        except Book.DoesNotExist:
+            messages.error(request, 'Livro não encontrado.')
         return redirect('home')
     else:
-        messages.error(request, 'Você preicsa estar logado!')
+        messages.error(request, 'Você precisa estar logado!')
         return redirect('home')
     
 def book_add(request):
