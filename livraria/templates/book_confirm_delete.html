@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% block content %}
+<style>
+  .delete-confirm-container {
+    max-width: 500px;
+    margin: 40px auto;
+    background: #fff;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    font-family: 'Roboto', sans-serif;
+    color: #1f4e5f;
+    text-align: center;
+  }
+
+  h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem;
+    color: #922b21;
+    margin-bottom: 10px;
+  }
+
+  p {
+    font-size: 1.1rem;
+    margin-bottom: 25px;
+  }
+
+  form {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+  }
+
+  .btn-danger {
+    background-color: #922b21;
+    color: white;
+    border: none;
+    padding: 10px 24px;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+
+  .btn-danger:hover {
+    background-color: #641e16;
+  }
+
+  .btn-secondary {
+    background-color: #1f4e5f;
+    color: white;
+    border: none;
+    padding: 10px 24px;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    line-height: 38px;
+  }
+
+  .btn-secondary:hover {
+    background-color: #164150;
+  }
+</style>
+
+<div class="delete-confirm-container">
+  <h2><i class="fas fa-exclamation-triangle"></i> Confirmar Exclusão</h2>
+  <p>Tem certeza que deseja excluir o livro <strong>"{{ object.title }}"</strong>?</p>
+  <form method="POST">
+    {% csrf_token %}
+    <a href="{% url 'book_list' %}" class="btn-secondary">Cancelar</a>
+    <button type="submit" class="btn-danger">Excluir</button>
+  </form>
+</div>
+{% endblock %}
