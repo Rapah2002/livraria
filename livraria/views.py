@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
-from .forms import SignUpForm, addBookForm
+from .forms import SignUpForm, BookForm
 from .models import Book
 from django.core.exceptions import ObjectDoesNotExist
 from django.views.generic import CreateView, UpdateView, DetailView, ListView, DeleteView
@@ -86,6 +86,7 @@ def book_delete(request, id):
         messages.error(request, 'Você precisa estar logado!')
         return redirect('home')
     
+'''
 def book_add(request):
     form= addBookForm(request.POST or None)
     if request.user.is_authenticated:
@@ -99,6 +100,7 @@ def book_add(request):
     else:
         messages.error(request, 'Você deve star autenticado para adicionar')
         return redirect('home')
+'''
 
 from .models import Book
 from .forms import BookForm
@@ -106,7 +108,7 @@ from .forms import BookForm
 # 1. Classe para Criar
 class BookCreateView(CreateView):
     model = Book
-    form_class = BookForm
+    form_class = addBookForm
     template_name = 'add_book.html'
     success_url = reverse_lazy('book_list')
     
@@ -161,9 +163,7 @@ class BookListView(ListView):
     context_object_name = 'books'
     
     def get_queryset(self):
-        queryset = super().get_queryset()
         return Book.objects.all()
-        return queryset
 
 # 5. Classe para Deletar
 class BookDeleteView(DeleteView):

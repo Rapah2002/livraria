@@ -53,7 +53,7 @@ class SignUpForm(UserCreationForm):
         </span>
         '''
         
-class addBookForm(forms.ModelForm):
+class BookForm(forms.ModelForm):
     #    title = forms.CharField(required=True,
     #        widget=forms.TextInput(attrs={'placeholder': 'Título Livro', "class": "form-control"}),
     #         label='')
