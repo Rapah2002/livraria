@@ -84,7 +84,7 @@
 <div class="addbook-container">
   <h2 class="text-center"><i class="fas fa-book-medical"></i> Adicionar Livro</h2>
   <hr>
-  <form method="POST" action="{% url 'add_book' %}">
+  <form method="POST" action="{% url 'book_create' %}">
     {% csrf_token %}
     {{ form.as_p }}
     <button type="submit" class="btn-success">

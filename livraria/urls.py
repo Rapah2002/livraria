@@ -7,6 +7,12 @@ from livraria.views import (
 )
 
 urlpatterns = [
+    # Views baseadas em função
+    path('', home, name='home'),
+    path('login/', login_user, name='login'),
+    path('logout/', logout_user, name='logout'),
+    path('register/', register_user, name='register'),
+    
     # Views baseadas em classe (CRUD)
     path('livros/', BookListView.as_view(), name='book_list'),
     path('livro/novo/', BookCreateView.as_view(), name='book_create'),
