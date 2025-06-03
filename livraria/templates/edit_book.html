@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block content %}
 <style>
-  .addbook-container {
+  .edit-book-container {
     max-width: 450px;
     margin: 0 auto;
     background: #fff;
@@ -39,7 +39,7 @@
 
   form input[type="text"],
   form input[type="number"],
-  form select {
+  form textarea {
     width: 100%;
     padding: 10px 12px;
     border: 1.8px solid #ccc;
@@ -50,46 +50,63 @@
 
   form input[type="text"]:focus,
   form input[type="number"]:focus,
-  form select:focus {
+  form textarea:focus {
     border-color: #1f4e5f;
     outline: none;
   }
 
-  /* Botão estilo "Adicionar" */
-  .btn-success {
-    background-color: #1f4e5f;
-    color: white;
-    border: none;
+  .btn-container {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    margin-top: 20px;
+  }
+
+  .btn {
     padding: 12px 28px;
     font-weight: bold;
     border-radius: 8px;
     cursor: pointer;
     font-size: 1.1rem;
-    transition: background-color 0.3s ease;
+    border: none;
     display: flex;
     align-items: center;
     gap: 8px;
-    justify-content: center;
+    text-decoration: none;
+    color: white;
   }
 
-  .btn-success:hover {
+  .btn-primary {
+    background-color: #1f4e5f;
+  }
+
+  .btn-primary:hover {
     background-color: #164150;
   }
 
-  .btn-success i {
-    font-size: 1.3rem;
+  .btn-secondary {
+    background-color: #6c757d;
+  }
+
+  .btn-secondary:hover {
+    background-color: #5a6268;
   }
 </style>
 
-<div class="addbook-container">
-  <h2 class="text-center"><i class="fas fa-book-medical"></i> Adicionar Livro</h2>
+<div class="edit-book-container">
+  <h2 class="text-center"><i class="fas fa-edit"></i> Editar Livro</h2>
   <hr>
-  <form method="POST" action="{% url 'book_create' %}">
+  <form method="POST">
     {% csrf_token %}
     {{ form.as_p }}
-    <button type="submit" class="btn-success">
-      <i class="fas fa-plus-circle"></i>Adicionar
-    </button>
+    <div class="btn-container">
+      <a href="{% url 'home' %}" class="btn btn-secondary">
+        <i class="fas fa-arrow-left"></i>Voltar
+      </a>
+      <button type="submit" class="btn btn-primary">
+        <i class="fas fa-save"></i>Salvar
+      </button>
+    </div>
   </form>
 </div>
-{% endblock %}
+{% endblock %} 

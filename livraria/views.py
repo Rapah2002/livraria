@@ -5,13 +5,13 @@ from django.contrib import messages
 from .forms import SignUpForm, BookForm
 from .models import Book
 from django.core.exceptions import ObjectDoesNotExist
-from django.views.generic import CreateView, UpdateView, DetailView, ListView, DeleteView
+from django.views.generic import CreateView, UpdateView, DetailView, DeleteView
 from django.urls import reverse_lazy
 
 # Create your views here.
 
 def home(request):
-    books = Book.objects.all()
+    books = Book.objects.all().order_by('id')
     if request.method == "POST":
         username = request.POST['usuario']
         password = request.POST['senha']
@@ -53,12 +53,11 @@ def register_user(request):
         form = SignUpForm(request.POST)
         if form.is_valid():
             form.save()
-            # Authenticate and login
             username = form.cleaned_data['username']
             password = form.cleaned_data['password1']
             user = authenticate(username=username, password=password)
             login(request, user)
-            messages.success(request, "Você fez login com sucesso com novo usuário")
+            messages.success(request, "Cadastro realizado com sucesso!")
             return redirect('home')
     else:
         form = SignUpForm()
@@ -109,7 +108,7 @@ class BookCreateView(CreateView):
     model = Book
     form_class = BookForm
     template_name = 'add_book.html'
-    success_url = reverse_lazy('book_list')
+    success_url = reverse_lazy('home')
     
     def form_valid(self, form):
         if self.request.user.is_authenticated:
@@ -118,7 +117,7 @@ class BookCreateView(CreateView):
             messages.success(self.request, "Livro adicionado com sucesso!")
             return super().form_valid(form)
         else:
-            messages.error(self.request, "Você precisa estar logado para adicionar!")
+            messages.error(self.request, "Você precisa estar logado para adicionar um livro!")
             return redirect('home')
 
 # 2. Classe para Editar
@@ -126,17 +125,22 @@ class BookUpdateView(UpdateView):
     model = Book
     form_class = BookForm
     template_name = 'edit_book.html'
-    success_url = reverse_lazy('book_list')
+    success_url = reverse_lazy('home')
+    
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            messages.error(request, "Você precisa estar logado!")
+            return redirect('home')
+        if not request.user.is_staff:
+            messages.error(request, "Você não tem permissão para editar livros!")
+            return redirect('home')
+        return super().dispatch(request, *args, **kwargs)
     
     def form_valid(self, form):
-        if self.request.user.is_authenticated:
-            book = form.save(commit=False)
-            book.save()
-            messages.success(self.request, "Livro editado com sucesso!")
-            return super().form_valid(form)
-        else:
-            messages.error(self.request, "Você precisa estar logado para editar!")
-            return redirect('home')
+        book = form.save(commit=False)
+        book.save()
+        messages.success(self.request, "Livro atualizado com sucesso!")
+        return super().form_valid(form)
 
 # 3. Classe para Detalhar
 class BookDetailView(DetailView):
@@ -146,39 +150,29 @@ class BookDetailView(DetailView):
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        # Precisa estar logado para visualizar o livro em específico, se não retorna erro
         if self.request.user.is_authenticated:
             book = self.get_object()
             context['book'] = book
+            return context
         else:
-            messages.error(self.request, 'Você precisa estar logado!')
+            messages.error(self.request, "Você precisa estar logado para visualizar os detalhes!")
             return redirect('home')
-        return context
 
-# 4. Classe para Listar
-class BookListView(ListView):
-    model = Book
-    template_name = 'book_list.html'
-    context_object_name = 'books'
-    
-    def get_queryset(self):
-        return Book.objects.all()
-
-# 5. Classe para Deletar
+# 4. Classe para Deletar
 class BookDeleteView(DeleteView):
     model = Book
     template_name = 'book_confirm_delete.html'
-    success_url = reverse_lazy('book_list')
+    success_url = reverse_lazy('home')
     
     def delete(self, request, *args, **kwargs):
         if self.request.user.is_authenticated:
             try:
                 book = self.get_object()
                 book.delete()
-                messages.success(self.request, 'Livro excluído com sucesso!')
+                messages.success(self.request, "Livro excluído com sucesso!")
             except Book.DoesNotExist:
-                messages.error(self.request, 'Livro não encontrado.')
+                messages.error(self.request, "Livro não encontrado!")
         else:
-            messages.error(self.request, 'Você precisa estar logado!')
+            messages.error(self.request, "Você precisa estar logado para excluir!")
             return redirect('home')
         return super().delete(request, *args, **kwargs)

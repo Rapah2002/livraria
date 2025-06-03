@@ -167,10 +167,20 @@
   </header>
 
   <nav>
-    <a href="{% url 'home' %}"><i class="fas fa-home"></i> Home</a>
-    <a href="{% url 'book_create' %}"><i class="fas fa-plus-circle"></i> Adicionar Livro</a>
-    <a href="{% url 'register' %}"><i class="fas fa-user-plus"></i> Cadastro</a>
-    <a href="{% url 'logout' %}"><i class="fas fa-sign-out-alt"></i> Sair</a>
+    {% if user.is_authenticated %}
+      {% if request.path == '/livro/novo/' %}
+        <a href="{% url 'home' %}"><i class="fas fa-home"></i>Home</a>
+      {% else %}
+        <a href="{% url 'book_create' %}"><i class="fas fa-plus-circle"></i>Adicionar Livro</a>
+      {% endif %}
+      <a href="{% url 'logout' %}"><i class="fas fa-sign-out-alt"></i>Sair</a>
+    {% else %}
+      {% if request.path == '/cadastro/' %}
+        <a href="{% url 'home' %}"><i class="fas fa-home"></i>Home</a>
+      {% else %}
+        <a href="{% url 'register' %}"><i class="fas fa-user-plus"></i>Cadastro</a>
+      {% endif %}
+    {% endif %}
   </nav>
 
   <div class="container">

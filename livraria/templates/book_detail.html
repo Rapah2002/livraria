@@ -1,0 +1,133 @@
+{% extends 'base.html' %}
+{% block content %}
+<style>
+  .book-detail-container {
+    max-width: 500px;
+    margin: 0 auto;
+    background: #fff;
+    padding: 30px 25px;
+    border-radius: 12px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+    font-family: 'Roboto', sans-serif;
+  }
+
+  h2.text-center {
+    font-family: 'Playfair Display', serif;
+    color: #1f4e5f;
+    margin-bottom: 10px;
+  }
+
+  hr {
+    border: none;
+    border-top: 2px solid #f7c04a;
+    margin-bottom: 25px;
+  }
+
+  .book-info {
+    margin-bottom: 30px;
+  }
+
+  .book-title {
+    font-size: 1.8rem;
+    color: #1f4e5f;
+    font-weight: 700;
+    margin-bottom: 15px;
+  }
+
+  .book-meta {
+    color: #666;
+    font-size: 1.1rem;
+    margin-bottom: 20px;
+  }
+
+  .book-description {
+    color: #444;
+    line-height: 1.6;
+    margin-bottom: 20px;
+  }
+
+  .book-value {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #922b21;
+    text-align: center;
+    padding: 15px;
+    background: #fff8e1;
+    border-radius: 8px;
+    margin-bottom: 25px;
+  }
+
+  .btn-container {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+  }
+
+  .btn {
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-weight: 600;
+    text-decoration: none;
+    color: white;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .btn-primary {
+    background-color: #1f4e5f;
+  }
+
+  .btn-primary:hover {
+    background-color: #164150;
+  }
+
+  .btn-danger {
+    background-color: #922b21;
+  }
+
+  .btn-danger:hover {
+    background-color: #641e16;
+  }
+
+  .btn-secondary {
+    background-color: #6c757d;
+  }
+
+  .btn-secondary:hover {
+    background-color: #5a6268;
+  }
+</style>
+
+<div class="book-detail-container">
+  <h2 class="text-center"><i class="fas fa-book"></i> Detalhes do Livro</h2>
+  <hr>
+  
+  <div class="book-info">
+    <h1 class="book-title">{{ book.title }}</h1>
+    <div class="book-meta">
+      <p><strong>Gênero:</strong> {{ book.genre }}</p>
+      <p><strong>Ano:</strong> {{ book.year }}</p>
+      <p><strong>Data de Cadastro:</strong> {{ book.created_at|date:"d/m/Y" }}</p>
+    </div>
+    <div class="book-description">
+      {{ book.description }}
+    </div>
+    <div class="book-value">
+      R$ {{ book.value }}
+    </div>
+  </div>
+
+  <div class="btn-container">
+    <a href="{% url 'home' %}" class="btn btn-secondary">
+      <i class="fas fa-arrow-left"></i>Voltar
+    </a>
+    <a href="{% url 'book_update' book.pk %}" class="btn btn-primary">
+      <i class="fas fa-edit"></i>Editar
+    </a>
+    <a href="{% url 'book_delete' book.pk %}" class="btn btn-danger">
+      <i class="fas fa-trash"></i>Excluir
+    </a>
+  </div>
+</div>
+{% endblock %} 

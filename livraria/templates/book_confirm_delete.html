@@ -68,7 +68,7 @@
   <p>Tem certeza que deseja excluir o livro <strong>"{{ object.title }}"</strong>?</p>
   <form method="POST">
     {% csrf_token %}
-    <a href="{% url 'book_list' %}" class="btn-secondary">Cancelar</a>
+    <a href="{% url 'home' %}" class="btn-secondary">Cancelar</a>
     <button type="submit" class="btn-danger">Excluir</button>
   </form>
 </div>
