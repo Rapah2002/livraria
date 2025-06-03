@@ -6,17 +6,20 @@ from .models import Book, Tag, Categoria
 class SignUpForm(UserCreationForm):
     email = forms.EmailField(
         label="",
-        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Email'})
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Email'}),
+        help_text='Digite um endereço de email válido'
     )
     first_name = forms.CharField(
         label="",
         max_length=100,
-        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Nome'})
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Nome'}),
+        help_text='Digite seu primeiro nome'
     )
     last_name = forms.CharField(
         label="",
         max_length=100,
-        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Sobrenome'})
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Sobrenome'}),
+        help_text='Digite seu sobrenome'
     )
 
     class Meta:
@@ -27,16 +30,25 @@ class SignUpForm(UserCreationForm):
         super(SignUpForm, self).__init__(*args, **kwargs)
 
         self.fields['username'].widget.attrs['class'] = 'form-control'
-        self.fields['username'].widget.attrs['placeholder'] = 'Usuário'
+        self.fields['username'].widget.attrs['placeholder'] = 'Nome de usuário'
         self.fields['username'].label = ''
+        self.fields['username'].help_text = 'Obrigatório. 150 caracteres ou menos. Letras, números e @/./+/-/_ apenas.'
 
         self.fields['password1'].widget.attrs['class'] = 'form-control'
         self.fields['password1'].widget.attrs['placeholder'] = 'Senha'
         self.fields['password1'].label = ''
+        self.fields['password1'].help_text = '''
+        Sua senha deve conter:
+        • No mínimo 8 caracteres
+        • Não pode ser muito similar às suas outras informações pessoais
+        • Não pode ser uma senha muito comum
+        • Não pode ser totalmente numérica
+        '''
 
         self.fields['password2'].widget.attrs['class'] = 'form-control'
-        self.fields['password2'].widget.attrs['placeholder'] = 'Confirme a senha'
+        self.fields['password2'].widget.attrs['placeholder'] = 'Confirme sua senha'
         self.fields['password2'].label = ''
+        self.fields['password2'].help_text = 'Digite a mesma senha novamente para verificação'
 
 class BookForm(forms.ModelForm):
     #    title = forms.CharField(required=True,
