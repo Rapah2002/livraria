@@ -1,75 +1,142 @@
 {% extends 'base.html' %}
+
 {% block content %}
 <style>
-  .delete-confirm-container {
-    max-width: 500px;
-    margin: 40px auto;
-    background: #fff;
+  .delete-container {
+    background-color: var(--card-bg);
+    border-radius: 8px;
     padding: 30px;
-    border-radius: 12px;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-    font-family: 'Roboto', sans-serif;
-    color: #1f4e5f;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    max-width: 600px;
+    margin: 0 auto;
     text-align: center;
   }
 
-  h2 {
+  .delete-icon {
+    font-size: 3rem;
+    color: #dc3545;
+    margin-bottom: 20px;
+  }
+
+  .delete-title {
+    color: var(--primary-color);
+    margin-bottom: 20px;
     font-family: 'Playfair Display', serif;
-    font-size: 1.8rem;
-    color: #922b21;
-    margin-bottom: 10px;
   }
 
-  p {
-    font-size: 1.1rem;
-    margin-bottom: 25px;
+  .delete-message {
+    color: var(--text-color);
+    margin-bottom: 30px;
+    line-height: 1.6;
   }
 
-  form {
+  .book-info {
+    background-color: rgba(255,255,255,0.1);
+    padding: 20px;
+    border-radius: 6px;
+    margin-bottom: 30px;
+    border: 1px solid var(--border-color);
+  }
+
+  .book-info h3 {
+    color: var(--primary-color);
+    margin-bottom: 15px;
+  }
+
+  .book-info p {
+    margin: 5px 0;
+    color: var(--text-color);
+  }
+
+  .buttons {
     display: flex;
+    gap: 15px;
     justify-content: center;
-    gap: 20px;
   }
 
-  .btn-danger {
-    background-color: #922b21;
-    color: white;
-    border: none;
-    padding: 10px 24px;
-    font-weight: bold;
-    border-radius: 8px;
-    cursor: pointer;
-  }
-
-  .btn-danger:hover {
-    background-color: #641e16;
-  }
-
-  .btn-secondary {
-    background-color: #1f4e5f;
-    color: white;
-    border: none;
-    padding: 10px 24px;
-    font-weight: bold;
-    border-radius: 8px;
-    cursor: pointer;
+  .btn {
+    padding: 12px 24px;
+    border-radius: 4px;
+    font-weight: 600;
     text-decoration: none;
-    display: inline-block;
-    line-height: 38px;
+    transition: background-color 0.3s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    min-width: 140px;
   }
 
-  .btn-secondary:hover {
-    background-color: #164150;
+  .btn i {
+    font-size: 0.9rem;
+  }
+
+  .btn-cancel {
+    background-color: var(--card-bg);
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+  }
+
+  .btn-cancel:hover {
+    background-color: rgba(255,255,255,0.1);
+  }
+
+  .btn-delete {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+  }
+
+  .btn-delete:hover {
+    background-color: #bb2d3b;
+  }
+
+  @media (max-width: 768px) {
+    .delete-container {
+      margin: 15px;
+      padding: 20px;
+    }
+
+    .buttons {
+      flex-direction: column;
+    }
+
+    .btn {
+      width: 100%;
+      text-align: center;
+    }
   }
 </style>
 
-<div class="delete-confirm-container">
-  <h2><i class="fas fa-exclamation-triangle"></i> Confirmar Exclusão</h2>
-  <p>Tem certeza que deseja excluir o livro <strong>"{{ object.title }}"</strong>?</p>
-  <form method="POST">
+<div class="delete-container">
+  <i class="fas fa-exclamation-triangle delete-icon"></i>
+  <h2 class="delete-title">Confirmar Exclusão</h2>
+  
+  <p class="delete-message">
+    Você tem certeza que deseja excluir este livro? Esta ação não pode ser desfeita.
+  </p>
+
+  <div class="book-info">
+    <h3>Informações do Livro</h3>
+    <p><strong>Título:</strong> {{ book.title }}</p>
+    <p><strong>Gênero:</strong> {{ book.genre }}</p>
+    <p><strong>Ano:</strong> {{ book.year }}</p>
+    <p><strong>Valor:</strong> R$ {{ book.value }}</p>
+    {% if book.categoria %}
+      <p><strong>Categoria:</strong> {{ book.categoria.nome }}</p>
+    {% endif %}
+  </div>
+
+  <form method="post">
     {% csrf_token %}
-    <a href="{% url 'home' %}" class="btn-secondary">Cancelar</a>
-    <button type="submit" class="btn-danger">Excluir</button>
+    <div class="buttons">
+      <a href="{% url 'book_detail' book.id %}" class="btn btn-cancel">
+        <i class="fas fa-times"></i> Cancelar
+      </a>
+      <button type="submit" class="btn btn-delete">
+        <i class="fas fa-trash"></i> Confirmar Exclusão
+      </button>
+    </div>
   </form>
 </div>
 {% endblock %}

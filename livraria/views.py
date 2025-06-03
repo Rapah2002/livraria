@@ -3,39 +3,74 @@ from django.http import HttpResponse
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from .forms import SignUpForm, BookForm
-from .models import Book
+from .models import Book, Categoria
 from django.core.exceptions import ObjectDoesNotExist
 from django.views.generic import CreateView, UpdateView, DetailView, DeleteView
 from django.urls import reverse_lazy
+from django.core.paginator import Paginator
+from django.db.models import Q
 
 # Create your views here.
 
 def home(request):
-    books = Book.objects.all().order_by('id')
+    # Inicializa o queryset
+    books = Book.objects.all().order_by('title')
+    
+    # Busca
+    search_query = request.GET.get('search', '')
+    if search_query:
+        books = books.filter(
+            Q(title__icontains=search_query) |
+            Q(description__icontains=search_query) |
+            Q(genre__icontains=search_query)
+        )
+    
+    # Filtros
+    categoria_id = request.GET.get('categoria')
+    if categoria_id:
+        books = books.filter(categoria_id=categoria_id)
+    
+    genre = request.GET.get('genre')
+    if genre:
+        books = books.filter(genre=genre)
+    
+    # Ordenação
+    order_by = request.GET.get('order_by', 'title')
+    if order_by in ['title', '-title', 'year', '-year', 'value', '-value']:
+        books = books.order_by(order_by)
+    
+    # Paginação
+    paginator = Paginator(books, 10)  # 10 livros por página
+    page = request.GET.get('page')
+    books = paginator.get_page(page)
+    
+    # Dados para os filtros
+    categorias = Categoria.objects.all()
+    genres = Book.objects.values_list('genre', flat=True).distinct()
+    
     if request.method == "POST":
         username = request.POST['usuario']
         password = request.POST['senha']
-        # Autenticando
-        user = authenticate(
-            request,
-            username=username,
-            password=password
-        )
+        user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            messages.success(
-                request,
-                "Login realizado com sucesso!"
-            )
+            messages.success(request, "Login realizado com sucesso!")
             return redirect('home')
         else:
-            messages.error(
-                request,
-                "Erro na autenticação. Tente novamente!"
-                )
+            messages.error(request, "Erro na autenticação. Tente novamente!")
             return redirect('home')
-    else:
-        return render(request, 'home.html', {'books':books})
+    
+    context = {
+        'books': books,
+        'categorias': categorias,
+        'genres': genres,
+        'search_query': search_query,
+        'selected_categoria': categoria_id,
+        'selected_genre': genre,
+        'order_by': order_by,
+    }
+    
+    return render(request, 'home.html', context)
 
 def login_user(request):
     pass
